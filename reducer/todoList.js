@@ -7,7 +7,13 @@ export default function todoList(state = {}, action) {
     switch (action.type) {
         case "LOAD_TODO_LIST": {
             const tempState = { ...state };
-            tempState.data = action.payload;
+            let sessionStore = renderWeb && JSON.parse(sessionStorage.getItem('todos'));
+            tempState.data = renderWeb && sessionStore && sessionStore.length > 0 ? sessionStore : action.payload || [];
+            return tempState;
+        }
+        case "RESET_TODO_LIST": {
+            const tempState = { ...state };
+            tempState.data = [];
             return tempState;
         }
         case "SELECT_TODO_LIST": {

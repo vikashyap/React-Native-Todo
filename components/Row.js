@@ -9,17 +9,21 @@ const styles = StyleSheet.create({
         padding: 12,
         flexDirection: 'row',
         alignItems: 'center',
-        borderBottomColor: '#ededed',
-        borderBottomWidth: 1,
+        height: 50,
+        backgroundColor: '#EEF4F7',
+        borderRadius: 3,
+        margin: 2,
+
 
 
     },
     text: {
         marginLeft: 12,
-        fontSize: 20,
+        fontSize: 13,
     },
-    textSelected: {
-        textDecorationLine: 'line-through',
+    doneTodo: {
+        textDecorationLine: 'line-through'
+
     }
 });
 
@@ -32,14 +36,13 @@ class Row extends React.Component {
     }
     render() {
         const props = this.props;
-        console.log(props);
         return (
             <TouchableHighlight onPress={() => { this._onPressButton(props) }} underlayColor="white">
-                <View style={styles.container}>
+                <View style={[styles.container]}>
                     <RadioButton selected={props.selected} />
                     <Text
-                        style={[styles.text, props.selected ? styles.textSelected : '']}>
-                        {`${props.firstName} ${props.lastName}`}
+                        style={[styles.text, props.selected ? styles.doneTodo : '']}>
+                        {`${props.category} `}
                     </Text>
                 </View>
             </TouchableHighlight >

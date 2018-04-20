@@ -7,10 +7,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 8,
         justifyContent: 'center',
-        backgroundColor: '#fff7f8',
+        // backgroundColor: '#C7AC98',
     },
     text: {
         fontSize: 13,
+        fontWeight: '800'
     },
 });
 

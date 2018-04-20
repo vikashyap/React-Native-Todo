@@ -1,32 +1,51 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Platform, Animated, TouchableOpacity } from 'react-native';
+
+const renderIos = Platform.select({
+    ios: true
+});
+const renderWeb = Platform.select({
+    web: true
+});
 
 const styles = StyleSheet.create({
     container: {
-        top: 10,
-        flex: 1,
-        padding: 5,
         flexDirection: 'row',
         alignItems: 'center',
+
+    }, addTodo: {
         backgroundColor: '#C7EFCF',
-        marginBottom: 10
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        width: 50,
+        height: 20
+
     },
     headerText: {
         fontSize: 45,
-        fontWeight: "400",
+        fontWeight: "800",
         textAlign: 'center',
-        color: 'rgba(175, 47, 47, 0.15)',
-        flex: 1,
+        color: '#0286CE',
         justifyContent: 'center',
+
     },
     input: {
-        height: 30,
+        borderRadius: 5,
+        height: 45,
         flex: 1,
         paddingHorizontal: 8,
         fontSize: 15,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 2,
+        backgroundColor: '#EFF0ED',
+        fontSize: 20,
+        fontWeight: "400",
+    },
+});
+const desktopStyles = renderWeb && StyleSheet.create({
+    webOutline: {
+        outline: 'none',
     },
 });
 
@@ -36,29 +55,44 @@ class Header extends React.Component {
         this.state = {
             search: ''
         }
+        this.animateBox = this.animateBox.bind(this);
+    }
+    componentWillMount = () => {
+        this.animatedValue = new Animated.Value(0.95);
     }
     searchTodo = (value) => {
         this.state.search = value.trim();
         this.forceUpdate();
-
         this.props.searchTodo(this.state.search)
-
+    }
+    animateBox = (value) => {
+        Animated.spring(this.animatedValue, {
+            toValue: value
+        }).start();
     }
     render() {
         const props = this.props;
+        const animatedStyles = {
+            transform: [{ scale: this.animatedValue }]
+        }
         return (
-            <View><Text style={styles.headerText}>WeEkly tOdOs</Text>
-                <View style={styles.container}>
+            <View>
+                <View>
+                    <Text style={styles.headerText}>Todos</Text>
+                </View>
+                <Animated.View style={[styles.container, animatedStyles]}>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, (renderWeb ? desktopStyles.webOutline : '')]}
                         placeholder="Search..."
-                        autoFocus={true}
                         keyboardType="default"
                         returnKeyType="done"
                         value={this.state.search}
+                        underlineColorAndroid='transparent'
                         onChangeText={(value) => this.searchTodo(value)}
+                        onFocus={() => { this.animateBox(1) }}
+                        onBlur={() => { this.animateBox(0.95) }}
                     />
-                </View>
+                </Animated.View>
             </View>
         );
     }

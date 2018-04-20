@@ -1,18 +1,17 @@
 import React from 'react';
-import { View, ListView, StyleSheet, Text, Platform } from 'react-native';
+import { View, ListView, StyleSheet, Text, Platform, ScrollView } from 'react-native';
 import data from './data';
 import Header from './header';
 import Row from './Row';
 import { formatData, keyGenerator, getDay } from './utility';
 import SectionHeader from './sectionHeader';
-import { loadTodoList, selectedData, addData, searchData } from '../action/todoList';
+import { loadTodoList, selectedData, addData, searchData, resetTodoList } from '../action/todoList';
 import AddList from './addList';
+import Animation from './animateComp';
 import { connect } from 'react-redux';
-import { Motion, spring, presets } from 'react-motion';
 
 const styles = StyleSheet.create({
     container: {
-        position: 'relative',
         flex: 1,
         marginTop: 20
     }
@@ -31,6 +30,7 @@ class ListViewDemo extends React.Component {
             isModal: false
         }
         this.selectItem = this.selectItem.bind(this);
+        this.resetTodoList = this.resetTodoList.bind(this);
     }
     componentDidMount = () => {
         this.props.loadTodoList();
@@ -53,17 +53,17 @@ class ListViewDemo extends React.Component {
         this.setState({ isModal: !this.state.isModal });
     }
     searchTodo = (value) => {
-        console.log(value);
         search = value;
         this.setState({ search: true });
-        //let tempObj = [...this.props.todoListData];
-        //this.props.searchData(tempObj, value);
-
+    }
+    resetTodoList = () => {
+        this.props.resetTodoList();
+        renderWeb && sessionStorage.removeItem('todos');
     }
     addTodoMethod(newTodo) {
         let tempObj = [...this.props.todoListData];
         newTodo.day = getDay();
-        newTodo.key = keyGenerator();
+        newTodo.uniqueId = keyGenerator();
         tempObj.unshift(newTodo);
         this.props.addData(tempObj);
         this.todoModalSelect();
@@ -75,7 +75,7 @@ class ListViewDemo extends React.Component {
         if (search) {
             debugger;
             ListData = ListData.filter(item => {
-                const itemSearch = item.firstName ? item.firstName.toLowerCase() : '';
+                const itemSearch = item.category ? item.category.toLowerCase() : '';
                 if (
                     itemSearch.indexOf(search.toLowerCase()) !== -1
                 ) {
@@ -99,21 +99,22 @@ class ListViewDemo extends React.Component {
             dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds),
         };
         return (
-            <View>
-
-                <ListView
-                    style={styles.container}
-                    dataSource={this.state.dataSource}
-                    renderRow={(ListData) => {
-                        return (
-                            <Row {...ListData} selectItem={this.selectItem} />
-                        )
-                    }}
-                    renderHeader={() => <Header searchTodo={this.searchTodo} />}
-                    renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
-                    renderFooter={() => <AddList todoModalSelect={this.todoModalSelect.bind(this)}
-                        addTodoMethod={this.addTodoMethod.bind(this)} />}
-                />
+            <View style={{ flex: 1, marginTop: 15, }}>
+                <Header style={{ marginTop: 200, position: 'absolute', left: 0, right: 0, bottom: 0 }} searchTodo={this.searchTodo} />
+                <ScrollView>
+                    {ListData && ListData.length > 0 ? <ListView
+                        style={styles.container}
+                        dataSource={this.state.dataSource}
+                        renderRow={(ListData) => {
+                            return (
+                                <Row {...ListData} selectItem={this.selectItem} />
+                            )
+                        }}
+                        renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
+                    /> : <Animation />}
+                </ScrollView>
+                <AddList style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }} resetTodoList={this.resetTodoList} todoModalSelect={this.todoModalSelect.bind(this)}
+                    addTodoMethod={this.addTodoMethod.bind(this)} />
             </View>
         );
     }
@@ -130,7 +131,8 @@ const mapDispatchToProps = (dispatch) => ({
     loadTodoList: () => { dispatch(loadTodoList()); },
     selectedData: (data) => { dispatch(selectedData(data)); },
     addData: (data) => { dispatch(addData(data)) },
-    searchData: (data, str) => { dispatch(searchData(data, str)) }
+    searchData: (data, str) => { dispatch(searchData(data, str)) },
+    resetTodoList: () => { dispatch(resetTodoList()) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListViewDemo);

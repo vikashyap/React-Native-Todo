@@ -6,6 +6,12 @@ export function loadTodoList() {
         payload: demoData
     };
 }
+export function resetTodoList() {
+    return {
+        type: 'RESET_TODO_LIST',
+        payload: demoData
+    };
+}
 export function selectedData(data) {
     return {
         type: 'SELECT_TODO_LIST',

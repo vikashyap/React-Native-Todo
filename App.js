@@ -8,9 +8,9 @@ import {
   Platform,
   StyleSheet,
   Text,
-  ScrollView,
+  View,
   ListView
-} from 'react-native';
+} from 'react-native'
 
 const renderWeb = Platform.select({
   web: true
@@ -25,9 +25,9 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={ReduxStore}>
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
           <ListComponent />
-        </ScrollView>
+        </View>
       </Provider>
     );
   }
@@ -36,7 +36,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFC',
     margin: 'auto',
     width: renderWeb && window.innerWidth > 700 ? '70%' : '100%',
   }

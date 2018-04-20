@@ -1,9 +1,6 @@
 
 const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 export function formatData(data) {
-    // We're sorting by alphabetically so we need the alphabet
-
-
     // Need somewhere to store our data
     const dataBlob = {};
     const sectionIds = [];
@@ -14,17 +11,17 @@ export function formatData(data) {
         // Get the current day we're currently looking for
         const currentDay = days[sectionId];
 
-        // Get users whose first name starts with the current letter
+        // Get activities whose  current day starts
         const users = data.filter((user) => user.day.toUpperCase().indexOf(currentDay) === 0);
 
-        // If there are any users who have a first name starting with the current letter then we'll
+        // If there are any activity who have a day starting with the current day then we'll
         // add a new section otherwise we just skip over it
         if (users.length > 0) {
             // Add a section id to our array so the listview knows that we've got a new section
             sectionIds.push(sectionId);
 
             // Store any data we would want to display in the section header. In our case we want to show
-            // the current character
+            // the current day
             dataBlob[sectionId] = { character: currentDay };
 
             // Setup a new array that we can store the row ids for this section
