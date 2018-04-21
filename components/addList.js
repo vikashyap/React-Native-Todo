@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
-        height: 40,
+        height: 50,
         flex: 1,
         paddingHorizontal: 8,
         fontSize: 15,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#0286CE',
         padding: 10,
-        width: '20%',
+        width: '30%',
         height: 40,
         flexDirection: 'row',
         alignItems: 'center',
