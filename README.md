@@ -23,5 +23,5 @@ npm run serve <To run on Web>
 - `npm run android-release`
 
 ### STEP 4 : In case Installation failed for Android Studio.
-- Download Apk from given link: bit.ly/nativeApp
+- Download Apk from given link: [Download App](bit.ly/nativeApp) <active for next 24 hours>
 - Extract Apk from Repo zip directory.
